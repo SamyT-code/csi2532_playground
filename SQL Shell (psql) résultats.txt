@@ -1,0 +1,261 @@
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+psql (14.1)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# CREATE DATABASE laboratoire5;
+CREATE DATABASE
+postgres=# \c laboratoire5
+You are now connected to database "laboratoire5" as user "postgres".
+laboratoire5=# \dt
+Did not find any relations.
+laboratoire5=# \i C:/Users/samyt/Desktop/Winter_2022/CSI2532/Labs/Lab1/csi2532_playground/laboratoire5/schema.sql
+CREATE TABLE
+laboratoire5=# \dt
+          List of relations
+ Schema |  Name   | Type  |  Owner
+--------+---------+-------+----------
+ public | courses | table | postgres
+(1 row)
+
+
+laboratoire5=# \i C:/Users/samyt/Desktop/Winter_2022/CSI2532/Labs/Lab1/csi2532_playground/laboratoire5/seed.sql
+INSERT 0 5
+laboratoire5=# seelct * from courses;
+ERROR:  syntax error at or near "seelct"
+LINE 1: seelct * from courses;
+        ^
+laboratoire5=# select * from courses
+laboratoire5-# select * from courses;
+ERROR:  syntax error at or near "select"
+LINE 2: select * from courses;
+        ^
+laboratoire5=# SELECT * FROM courses;
+ course_name | semester | professor_name
+-------------+----------+----------------
+ CSI2532     | W-2020   | A
+ CSI2532     | W-2021   | A
+ CSI2532     | W-2022   | A
+ CSI2532     | W-2023   | A
+ CSI2532     | W-2023   | A
+(5 rows)
+
+
+laboratoire5=# ALTER TABLEALTER TABLE courses
+laboratoire5-# ADD id integer;
+ERROR:  syntax error at or near "TABLEALTER"
+LINE 1: ALTER TABLEALTER TABLE courses
+              ^
+laboratoire5=# ADD id integer;
+ERROR:  syntax error at or near "ADD"
+LINE 1: ADD id integer;
+        ^
+laboratoire5=# ALTER TABLE courses ADD id integer;
+ALTER TABLE
+laboratoire5=# select * from courses;
+ course_name | semester | professor_name | id
+-------------+----------+----------------+----
+ CSI2532     | W-2020   | A              |
+ CSI2532     | W-2021   | A              |
+ CSI2532     | W-2022   | A              |
+ CSI2532     | W-2023   | A              |
+ CSI2532     | W-2023   | A              |
+(5 rows)
+
+
+laboratoire5=# ALTER TABLE courses
+laboratoire5-# ALTER TABLE courses ADD PRIMARY KEY(id)
+laboratoire5-# ALTER TABLE courses ADD PRIMARY KEY(id);
+ERROR:  syntax error at or near "TABLE"
+LINE 2: ALTER TABLE courses ADD PRIMARY KEY(id)
+              ^
+laboratoire5=# ALTER TABLE courses ADD PRIMARY KEY(id);
+ERROR:  column "id" of relation "courses" contains null values
+laboratoire5=# ALTER TABLE courses ADD id serial;
+ERROR:  column "id" of relation "courses" already exists
+laboratoire5=# ALTER TABLE courses DROP COLUMN id;
+ALTER TABLE
+laboratoire5=# ALTER TABLE courses ADD id serial;
+ALTER TABLE
+laboratoire5=# \dt
+          List of relations
+ Schema |  Name   | Type  |  Owner
+--------+---------+-------+----------
+ public | courses | table | postgres
+(1 row)
+
+
+laboratoire5=# select * from courses;
+ course_name | semester | professor_name | id
+-------------+----------+----------------+----
+ CSI2532     | W-2020   | A              |  1
+ CSI2532     | W-2021   | A              |  2
+ CSI2532     | W-2022   | A              |  3
+ CSI2532     | W-2023   | A              |  4
+ CSI2532     | W-2023   | A              |  5
+(5 rows)
+
+
+laboratoire5=# \i C:/Users/samyt/Desktop/Winter_2022/CSI2532/Labs/Lab1/csi2532_playground/laboratoire5/migrations/20220228132800-ajout-id.sql
+ALTER TABLE
+ALTER TABLE
+laboratoire5=# select * from courses;
+ course_name | semester | professor_name | id
+-------------+----------+----------------+----
+ CSI2532     | W-2020   | A              |  1
+ CSI2532     | W-2021   | A              |  2
+ CSI2532     | W-2022   | A              |  3
+ CSI2532     | W-2023   | A              |  4
+ CSI2532     | W-2023   | A              |  5
+(5 rows)
+
+
+laboratoire5=# \i C:/Users/samyt/Desktop/Winter_2022/CSI2532/Labs/Lab1/csi2532_playground/laboratoire5/migrations/20220228135900-ajout-PK.sql
+ALTER TABLE
+laboratoire5=# \d+ courses
+                                                                   Table "public.courses"
+     Column     |          Type          | Collation | Nullable |               Default               | Storage  | Compression | Stats target | Description
+----------------+------------------------+-----------+----------+-------------------------------------+----------+-------------+--------------+-------------
+ course_name    | character varying(255) |           |          |                                     | extended |             |              |
+ semester       | character varying(255) |           |          |                                     | extended |             |              |
+ professor_name | character varying(255) |           |          |                                     | extended |             |              |
+ id             | integer                |           | not null | nextval('courses_id_seq'::regclass) | plain    |             |              |
+Indexes:
+    "courses_pkey" PRIMARY KEY, btree (id)
+Access method: heap
+
+
+laboratoire5=# select * from courses;
+ course_name | semester | professor_name | id
+-------------+----------+----------------+----
+ CSI2532     | W-2020   | A              |  1
+ CSI2532     | W-2021   | A              |  2
+ CSI2532     | W-2022   | A              |  3
+ CSI2532     | W-2023   | A              |  4
+ CSI2532     | W-2023   | A              |  5
+(5 rows)
+
+
+laboratoire5=# \i C:/Users/samyt/Desktop/Winter_2022/CSI2532/Labs/Lab1/csi2532_playground/laboratoire5/migrations/20220228140300-table-migration.sql
+CREATE TABLE
+laboratoire5=# \dt
+           List of relations
+ Schema |   Name    | Type  |  Owner
+--------+-----------+-------+----------
+ public | courses   | table | postgres
+ public | migration | table | postgres
+(2 rows)
+
+
+laboratoire5=# select * from migrations;
+ERROR:  relation "migrations" does not exist
+LINE 1: select * from migrations;
+                      ^
+laboratoire5=# select * from migration;
+ nom_migration | temps_migration
+---------------+-----------------
+(0 rows)
+
+
+laboratoire5=# INSERT INTO migration VALUES ('Ajout ID', '20220228132800'), ('Ajout PK', '202202281400');
+INSERT 0 2
+laboratoire5=# select * from migration;
+ nom_migration | temps_migration
+---------------+-----------------
+ Ajout ID      | 20220228132800
+ Ajout PK      | 202202281400
+(2 rows)
+
+
+laboratoire5=# select * from courses;
+ course_name | semester | professor_name | id
+-------------+----------+----------------+----
+ CSI2532     | W-2020   | A              |  1
+ CSI2532     | W-2021   | A              |  2
+ CSI2532     | W-2022   | A              |  3
+ CSI2532     | W-2023   | A              |  4
+ CSI2532     | W-2023   | A              |  5
+(5 rows)
+
+
+laboratoire5=# \i C:/Users/samyt/Desktop/Winter_2022/CSI2532/Labs/Lab1/csi2532_playground/laboratoire5/migrations/20220228141200-split-semester.sql
+ course_name | session | annee | course_name | semester | professor_name | id
+-------------+---------+-------+-------------+----------+----------------+----
+ CSI2532     | W       | 2020  | CSI2532     | W-2020   | A              |  1
+ CSI2532     | W       | 2021  | CSI2532     | W-2021   | A              |  2
+ CSI2532     | W       | 2022  | CSI2532     | W-2022   | A              |  3
+ CSI2532     | W       | 2023  | CSI2532     | W-2023   | A              |  4
+ CSI2532     | W       | 2023  | CSI2532     | W-2023   | A              |  5
+(5 rows)
+
+
+laboratoire5=# CREATE DATABASE temp;
+CREATE DATABASE
+laboratoire5=# \c temp
+You are now connected to database "temp" as user "postgres".
+temp=# \i C:/Users/samyt/Desktop/Winter_2022/CSI2532/Labs/Lab1/csi2532_playground/laboratoire5/schema_actuel.sql
+CREATE TABLE
+psql:C:/Users/samyt/Desktop/Winter_2022/CSI2532/Labs/Lab1/csi2532_playground/laboratoire5/schema_actuel.sql:14: ERROR:  null value in column "id" of relation "courses" violates not-null constraint
+DETAIL:  Failing row contains (CSI2532, W-2020, A, null).
+ALTER TABLE
+ALTER TABLE
+temp=# dt\
+invalid command \
+Try \? for help.
+temp-# \c laboratoire5
+You are now connected to database "laboratoire5" as user "postgres".
+laboratoire5-# CREATE DATABASE temp2;
+ERROR:  syntax error at or near "dt"
+LINE 1: dt
+        ^
+laboratoire5=# CREATE DATABASE temp2;
+CREATE DATABASE
+laboratoire5=# \c temp2
+You are now connected to database "temp2" as user "postgres".
+temp2=# i\ C:/Users/samyt/Desktop/Winter_2022/CSI2532/Labs/Lab1/csi2532_playground/laboratoire5/schema.sql
+invalid command \
+Try \? for help.
+temp2-# i\ C:/Users/samyt/Desktop/Winter_2022/CSI2532/Labs/Lab1/csi2532_playground/laboratoire5/schema.sql
+invalid command \
+Try \? for help.
+temp2-# C:/Users/samyt\Desktop/Winter_2022/CSI2532/Labs/Lab1/csi2532_playground/laboratoire5/schema.sql
+invalid command \Desktop/Winter_2022/CSI2532/Labs/Lab1/csi2532_playground/laboratoire5/schema.sql
+Try \? for help.
+temp2-# \i C:/Users/samyt\Desktop/Winter_2022/CSI2532/Labs/Lab1/csi2532_playground/laboratoire5/schema.sql
+C:/Users/samyt: Permission denied
+temp2-# \i C:/Users/samyt\Desktop/Winter_2022/CSI2532/Labs/Lab1/csi2532_playground/laboratoire5/schema.sql
+C:/Users/samyt: Permission denied
+temp2-# \i C:/Users/samyt/Desktop/Winter_2022/CSI2532/Labs/Lab1/csi2532_playground/laboratoire5/schema.sql
+CREATE TABLE
+temp2-# \i C:/Users/samyt/Desktop/Winter_2022/CSI2532/Labs/Lab1/csi2532_playground/laboratoire5/seed.sql
+INSERT 0 5
+temp2-# \i C:/Users/samyt/Desktop/Winter_2022/CSI2532/Labs/Lab1/csi2532_playground/laboratoire5/migrations/20220228132800-ajout-id.sql
+psql:C:/Users/samyt/Desktop/Winter_2022/CSI2532/Labs/Lab1/csi2532_playground/laboratoire5/migrations/20220228132800-ajout-id.sql:1: ERROR:  column "id" of relation "courses" does not exist
+ALTER TABLE
+temp2-# \i C:/Users/samyt/Desktop/Winter_2022/CSI2532/Labs/Lab1/csi2532_playground/laboratoire5/migrations/20220228132800-ajout-id.sql
+psql:C:/Users/samyt/Desktop/Winter_2022/CSI2532/Labs/Lab1/csi2532_playground/laboratoire5/migrations/20220228132800-ajout-id.sql:2: ERROR:  column "id" of relation "courses" already exists
+temp2-# \i C:/Users/samyt/Desktop/Winter_2022/CSI2532/Labs/Lab1/csi2532_playground/laboratoire5/migrations/20220228132800-ajout-id.sql
+ALTER TABLE
+ALTER TABLE
+temp2-# \i C:/Users/samyt/Desktop/Winter_2022/CSI2532/Labs/Lab1/csi2532_playground/laboratoire5/migrations/20220228135900-ajout-PK.sql
+ALTER TABLE
+temp2-# \i C:/Users/samyt/Desktop/Winter_2022/CSI2532/Labs/Lab1/csi2532_playground/laboratoire5/migrations/20220228140300-table-migration.sql
+CREATE TABLE
+temp2-# \i C:/Users/samyt/Desktop/Winter_2022/CSI2532/Labs/Lab1/csi2532_playground/laboratoire5/migrations/20220228141200-split-semester.sql
+ course_name | session | annee | course_name | semester | professor_name | id
+-------------+---------+-------+-------------+----------+----------------+----
+ CSI2532     | W       | 2020  | CSI2532     | W-2020   | A              |  1
+ CSI2532     | W       | 2021  | CSI2532     | W-2021   | A              |  2
+ CSI2532     | W       | 2022  | CSI2532     | W-2022   | A              |  3
+ CSI2532     | W       | 2023  | CSI2532     | W-2023   | A              |  4
+ CSI2532     | W       | 2023  | CSI2532     | W-2023   | A              |  5
+(5 rows)
+
+
+temp2-#
