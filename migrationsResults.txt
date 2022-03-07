@@ -1,0 +1,148 @@
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+psql (14.1)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# CREATE DATABASE lab6;
+CREATE DATABASE
+postgres=# \c lab6
+You are now connected to database "lab6" as user "postgres".
+lab6=# \i C:/Users/samyt/Desktop/Winter_2022/CSI2532/Labs/Lab1/csi2532_playground/schema.sql
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+lab6=# \dt
+            List of relations
+ Schema |    Name     | Type  |  Owner
+--------+-------------+-------+----------
+ public | artists     | table | postgres
+ public | artworks    | table | postgres
+ public | customers   | table | postgres
+ public | likeartists | table | postgres
+(4 rows)
+
+
+lab6=# \i C:/Users/samyt/Desktop/Winter_2022/CSI2532/Labs/Lab1/csi2532_playground/seed.sql
+INSERT 0 3
+INSERT 0 3
+INSERT 0 2
+lab6=# select * from artists;
+    name    | birthplace |  style  | dateofbirth
+------------+------------+---------+-------------
+ Caravaggio | Milan      | Baroque | 1571-09-28
+ Smith      | Ottawa     | Modern  | 1977-12-12
+ Picasso    | Malaga     | Cubism  | 1881-10-25
+(3 rows)
+
+
+lab6=# select * from customers;
+ id | name  | address  | amount
+----+-------+----------+--------
+  1 | John  | Ottawa   |   8.50
+  2 | Amy   | Orleans  |   9.00
+  3 | Peter | Gatineau |   6.30
+(3 rows)
+
+
+lab6=# select * from artworks;
+     title      | year |  type   |  price   | artist_name
+----------------+------+---------+----------+-------------
+ Blue           | 2000 | Modern  | 10000.00 | Smith
+ The Cardsharps | 1594 | Baroque | 40000.00 | Caravaggio
+(2 rows)
+
+
+lab6=# select * from artists where birthplace = 'Ottawa';
+ name  | birthplace | style  | dateofbirth
+-------+------------+--------+-------------
+ Smith | Ottawa     | Modern | 1977-12-12
+(1 row)
+
+
+lab6=# SELECT title, price FROM artworks WHERE year = 2000;
+ title |  price
+-------+----------
+ Blue  | 10000.00
+(1 row)
+
+
+lab6=# UPDATE customers
+lab6-# SET amount = 9.8
+lab6-# WHERE address = 'Gatineau';
+UPDATE 1
+lab6=# select *from customers;
+ id | name  | address  | amount
+----+-------+----------+--------
+  1 | John  | Ottawa   |   8.50
+  2 | Amy   | Orleans  |   9.00
+  3 | Peter | Gatineau |   9.80
+(3 rows)
+
+
+lab6=# DELETE FROM customers WHERE name = 'John';
+DELETE 1
+lab6=#
+lab6=# ALTER TABLE artists ADD COLUMN country varchar(100);
+ALTER TABLE
+lab6=# ALTER TABLE customers ADD COLUMN rating integer CHECK (rating between 1 and 10);
+ALTER TABLE
+lab6=# INSERT INTO customers
+lab6-# (id, name, address, amount, rating)
+lab6-# VALUES
+lab6-# (4, 'Emre', 'Preston', 20000.00, 5),
+lab6-# (5, 'Saeid', null, 40000.00, 6);
+INSERT 0 2
+lab6=# INSERT INTO artists
+lab6-# (name, birthplace, style, dateofbirth, country)
+lab6-# VALUES
+lab6-# ('Leonardo', 'Florence', 'Renaissance', '04-15-1452', 'Italy'),
+lab6-# ('Michelangelo', 'Arezzo', 'Renaissance', '03-06-1475',
+lab6(# 'Italy'),
+lab6-# ('Josefa', 'Seville', 'Baroque', '09-09-1630', 'Spain'),
+lab6-# ('Hans Hofmann', 'Weisenburg', 'Modern', '02-17-1966', 'Germany'), ('John', 'San Francisco', 'Modern', '02-17-1920', 'USA');
+ERROR:  date/time field value out of range: "04-15-1452"
+LINE 4: ('Leonardo', 'Florence', 'Renaissance', '04-15-1452', 'Italy...
+                                                ^
+HINT:  Perhaps you need a different "datestyle" setting.
+lab6=# \i C:/Users/samyt/Desktop/Winter_2022/CSI2532/Labs/Lab1/csi2532_playground/seed.sql
+psql:C:/Users/samyt/Desktop/Winter_2022/CSI2532/Labs/Lab1/csi2532_playground/seed.sql:25: ERROR:  date/time field value out of range: "04-15-1452"
+LINE 4: ('Leonardo', 'Florence', 'Renaissance', '04-15-1452', 'Italy...
+                                                ^
+HINT:  Perhaps you need a different "datestyle" setting.
+INSERT 0 2
+psql:C:/Users/samyt/Desktop/Winter_2022/CSI2532/Labs/Lab1/csi2532_playground/seed.sql:38: ERROR:  insert or update on table "likeartists" violates foreign key constraint "likeartists_artist_name_fkey"
+DETAIL:  Key (artist_name)=(Leonardo) is not present in table "artists".
+lab6=# \i C:/Users/samyt/Desktop/Winter_2022/CSI2532/Labs/Lab1/csi2532_playground/seed.sql
+INSERT 0 5
+INSERT 0 3
+lab6=# \i C:/Users/samyt/Desktop/Winter_2022/CSI2532/Labs/Lab1/csi2532_playground/seed.sql
+ALTER TABLE
+ALTER TABLE
+lab6=# select * from artworks;
+      title      | year |  type   |  price   | artist_name
+-----------------+------+---------+----------+-------------
+ Blue            | 2000 | Modern  | 10000.00 | Smith
+ The Cardsharps  | 1594 | Baroque | 40000.00 | Caravaggio
+ Waves           | 2000 |         |  4000.00 | Smith
+ Three Musicians | 1921 | Modern  | 11000.00 | Picasso
+(4 rows)
+
+
+lab6=# DELETE FROM artists WHERE name = 'Smith';
+DELETE 1
+lab6=# select * from artworks;
+      title      | year |  type   |  price   | artist_name
+-----------------+------+---------+----------+-------------
+ The Cardsharps  | 1594 | Baroque | 40000.00 | Caravaggio
+ Three Musicians | 1921 | Modern  | 11000.00 | Picasso
+(2 rows)
+
+
+lab6=#
