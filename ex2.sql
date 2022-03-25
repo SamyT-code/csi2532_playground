@@ -1,0 +1,4 @@
+CREATE ASSERTION maximum
+	CHECK(
+		 10000 < (SELECT COUNT(*) FROM Authors) AND 10000 < (SELECT COUNT(*) FROM Books)
+	);
